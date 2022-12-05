@@ -86,7 +86,6 @@ public class UsuarioController {
         if(crd1.isPresent()){
             Credencial credencial1 = crd1.get();
             model.addAttribute("credencial",credencial1);
-
             model.addAttribute("listaRoles",listaRoles);
         }
 
@@ -94,7 +93,7 @@ public class UsuarioController {
     }
 
     @PostMapping(value = {"/guardar"})
-    public String guardarNuevoUsuario(Model model, @ModelAttribute("credencial") Credencial credencial,
+    public String guardarUsuario(Model model, @ModelAttribute("credencial") Credencial credencial,
                                       RedirectAttributes attr, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             //Error al actualizar/crear los datos
@@ -105,6 +104,15 @@ public class UsuarioController {
                 //Credencial actualizada correctamente
             }
             credencialService.guardarCredencial(credencial);
+        }
+        return "redirect:/usuarios/lista";
+    }
+
+    @GetMapping(value = {"/borrar"})
+    public String borrarUsuario(@RequestParam("id") int id){
+        Optional<Credencial> crd1 = credencialService.buscarCredencialPorId(id);
+        if(crd1.isPresent()){
+            credencialService.eliminarCredencial(id);
         }
         return "redirect:/usuarios/lista";
     }

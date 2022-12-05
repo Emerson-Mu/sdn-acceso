@@ -25,4 +25,8 @@ public class CredencialService {
     public Optional<Credencial> buscarCredencialPorId(int id){
         return credencialRepository.findById(id);
     }
+
+    public void eliminarCredencial(int id){
+        credencialRepository.deleteById(id);
+    }
 }
