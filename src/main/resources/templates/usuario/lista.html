@@ -1,38 +1,38 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/base.html :: head(title='Gameshop3 - Bienvenido')"></head>
+<head th:replace="fragments/base.html :: head(title='SESRVIDOR AUTENTICACION - Bienvenido')"></head>
 <body>
 <div class='container container-app'>
-    <div th:replace="fragments/header.html :: header('Distribuidoras')"></div>
+    <div th:replace="fragments/header.html :: header('Usuarios')"></div>
 
     <div id="content">
         <main>
             <!-- Contenido -->
             <div class="page-header text-center">
-                <h1>Lista de Distribuidoras</h1>
+                <h1>Lista de Usuarios</h1>
             </div>
             <div class="container-fluid">
 
-                <a class="btn btn-primary mt-4 mb-4" th:href="@{/usuarios/nuevo}">Nueva Distribuidora</a>
+                <a class="btn btn-info mt-4 mb-4" th:href="@{/usuarios/nuevo}">Nuevo Usuario</a>
                 <div th:if="${msg != null}" th:text="${msg}" class="alert alert-success" role="alert"></div>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre</th>
-                        <th>Fundación</th>
-                        <th>Sede</th>
+                        <th>Correo</th>
+                        <th>Roles</th>
+                        <!--th>Sede</th-->
                         <th></th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="credencial, info : ${listaCrededenciales}">
+                    <tr th:each="credencial, info : ${listaUsuarioRol}">
                         <td th:text="${info.index + 1}"></td>
                         <td th:text="${credencial.varUsCorreo}"></td>
-                        <td th:text="${credencial.varUsPassword}"></td>
+                        <td th:text="${credencial.roles}"></td>
                         <!--td th:text="${distribuidora.pais.nombre}"></td-->
-                        <td><a class="btn btn-primary" th:href="@{'/usuario/editar?id=' + ${credencial.intIdCrd}}">Editar</a></td>
-                        <td><a class="btn btn-danger" th:href="@{'/usuario/borrar?id=' + ${credencial.intIdCrd}}">Borrar</a></td>
+                        <td><a class="btn btn-info" th:href="@{'/usuarios/editar?id=' + ${credencial.idCredencial}}">Editar</a></td>
+                        <td><a class="btn btn-danger" th:href="@{'/usuarios/borrar?id=' + ${credencial.idCredencial}}">Borrar</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -43,7 +43,7 @@
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Grupo 1 - PUCP @ 2021</div>
+                    <div class="text-muted">Grupo 3 - PUCP @ 2022</div>
                 </div>
             </div>
         </footer>

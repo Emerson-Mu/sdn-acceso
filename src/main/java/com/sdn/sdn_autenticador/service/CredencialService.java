@@ -14,7 +14,7 @@ public class CredencialService {
         this.credencialRepository = credencialRepository;
     }
 
-    public Credencial crearCredencial(Credencial credencial){
+    public Credencial guardarCredencial(Credencial credencial){
         return credencialRepository.save(credencial);
     }
 

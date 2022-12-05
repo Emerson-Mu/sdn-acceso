@@ -1,0 +1,49 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/base.html :: head(title='SERVIDOR AUTENTICACION - Bienvenido')"></head>
+<body>
+<div class='container'>
+    <div th:replace="fragments/header.html :: header(option='Usuarios')"></div>
+
+    <div id="content">
+        <main>
+            <!-- Contenido -->
+            <div class="page-header text-center">
+                <h2 th:text="${credencial.intIdCrd == 0? 'Nueva Credencial' : 'Editar Credencial'}"></h2>
+            </div>
+            <div class="container-fluid">
+                <form method="POST"  th:object="${credencial}" th:action="@{/usuarios/guardar}">
+                    <div class="form-group">
+                        <label for="varUsCorreo">Correo</label>
+                        <input type="text" class="form-control" id="varUsCorreo" name="varUsCorreo" th:field="*{varUsCorreo}" >
+                        <div class="text-danger" th:if="${#fields.hasErrors('varUsCorreo')}" th:errors="*{varUsCorreo}">Error</div>
+                    </div>
+                    <div class="container-fluid">
+                        <label>Rol</label>
+                        <br>
+                            <input type="checkbox" name="roles"
+                            th:each="rol : ${listaRoles}"
+                            th:text="' '+${rol.varRolNombre}+'      '"
+                            th:value="${rol.intIdRol}"
+                                   th:field="*{roles}">
+                    </div>
+                    <br>
+                    <input type="hidden" th:field="*{intIdCrd}" th:if="${credencial.intIdCrd > 0}" />
+                    <input type="hidden" th:field="*{varUsPassword}" th:value="${credencial.varUsPassword}"/>
+                    <a th:href="@{/usuarios/lista}" class="btn btn-danger">Cancelar</a>
+                    <button type="submit" class="btn btn-info" th:text="${credencial.intIdCrd == 0? 'Registrar' : 'Actualizar'}">Reg/act</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <!-- /Contenido -->
+    <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">Grupo 3 - PUCP @ 2022</div>
+            </div>
+        </div>
+    </footer>
+</div>
+<div th:replace="fragments/base.html :: jsScripts"></div>
+</body>
+</html>

@@ -2,7 +2,11 @@ package com.sdn.sdn_autenticador.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@Table(name = "credencial")
 public class Credencial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -14,6 +18,14 @@ public class Credencial {
     @Basic
     @Column(name = "var_us_password")
     private String varUsPassword;
+
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario",
+            joinColumns = @JoinColumn(name = "credencial_int_id_credencial"),
+            inverseJoinColumns = @JoinColumn(name = "rol_int_id_rol")
+    )
+    private Set<Rol> roles = new HashSet<>();
 
     public int getIntIdCrd() {
         return intIdCrd;
@@ -37,6 +49,14 @@ public class Credencial {
 
     public void setVarUsPassword(String varUsPassword) {
         this.varUsPassword = varUsPassword;
+    }
+
+    public Set<Rol> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Rol> roles) {
+        this.roles = roles;
     }
 
     @Override
