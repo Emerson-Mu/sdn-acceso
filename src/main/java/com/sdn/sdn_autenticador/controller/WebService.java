@@ -4,21 +4,17 @@ import com.sdn.sdn_autenticador.entity.Credencial;
 import com.sdn.sdn_autenticador.entity.Rol;
 import com.sdn.sdn_autenticador.entity.Usuario;
 import com.sdn.sdn_autenticador.entity.UsuarioJson;
+import com.sdn.sdn_autenticador.repository.CredencialRepository;
 import com.sdn.sdn_autenticador.service.CredencialService;
 import com.sdn.sdn_autenticador.service.RolService;
 import com.sdn.sdn_autenticador.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -27,6 +23,9 @@ public class WebService {
     private final UsuarioService usuarioService;
     private final CredencialService credencialService;
     private final RolService rolService;
+
+    @Autowired
+    CredencialRepository credencialRepository;
 
     public WebService(CredencialService credencialService, UsuarioService usuarioService, RolService rolService){
         this.usuarioService = usuarioService;
@@ -96,6 +95,30 @@ public class WebService {
 
     }
 
-
+    @GetMapping("/consulta/{usuario}/{password}")
+    public ResponseEntity<LinkedHashMap<String,Object>> consultaCredenciales(@PathVariable("usuario") String usuario,
+                                                                             @PathVariable("password") String password){
+        LinkedHashMap<String,Object> hashMap = new LinkedHashMap<>();
+        /*Validamos si las credenciales existen*/
+        List<Credencial> listaDeCredenciales = credencialRepository.findAll();
+        List<Credencial> usuariosEncontrados = new ArrayList<>();
+        for(Credencial credencial:listaDeCredenciales){
+            if(usuario.equals(credencial.getVarUsCorreo()) && password.equals(credencial.getVarUsPassword())){
+                usuariosEncontrados.add(credencial);
+            }
+        }
+        /*Si la lista 'usuariosEncontrados' esta vacía, entonces no se encontro un usuario con tales credenciales*/
+        if(usuariosEncontrados.isEmpty()){
+            hashMap.put("existe",false);
+            hashMap.put("msg","Usuario o contraseña incorrecta");
+        }else{
+            /*Obtenemos los roles que tiene*/
+            List<String> rolesDelUsuario = credencialRepository.obtenerRolesDelUsuario(usuario);
+            hashMap.put("existe",true);
+            hashMap.put("credenciales",usuariosEncontrados.get(0));
+            hashMap.put("categorias",rolesDelUsuario);
+        }
+        return ResponseEntity.ok(hashMap);
+    }
 
 }
