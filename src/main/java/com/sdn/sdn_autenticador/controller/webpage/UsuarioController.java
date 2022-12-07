@@ -48,12 +48,16 @@ public class UsuarioController {
             usuarioRol.setIdUsuario(crd1.getIntIdCrd());
             usuarioRol.setVarUsCorreo(crd1.getVarUsCorreo());
 
+
             int idCrd1 = crd1.getIntIdCrd();
+
+            usuarioRol.setIdCredencial(idCrd1);
+
             String roles = "";
             for(Usuario us1 : listaUsuarios){
                 if(us1.getCredencialIntIdCredencial()==idCrd1){
                     Rol rol1 = rolService.buscarRolPorId(us1.getRolIntIdRol()).get();
-                    usuarioRol.setIdCredencial(idCrd1);
+                    //usuarioRol.setIdCredencial(idCrd1);
                     String rolName = rol1.getVarRolNombre();
                     if(roles.equals("")){
                         roles = roles+rolName;
